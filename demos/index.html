@@ -20,13 +20,13 @@
   <section class="make-center">
     <div>
       <input type="text" id="room-id" value="abcdef" autocorrect=off autocapitalize=off size=20>
-      <button id="open-room">Open Room</button>
-      <button id="join-room">Join Room</button>
-      <button id="open-or-join-room">Auto Open Or Join Room</button>
+      <button id="open-room" style="visibility: hidden;">Open Room</button>
+      <button id="join-room" style="visibility: hidden;">Join Room</button>
+      <button id="open-or-join-room">Open room</button>
     </div>
 
     <div id="videos-container" style="margin: 20px 0;"></div>
-
+    
     <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
   </section>
 
@@ -56,6 +56,10 @@ document.getElementById('open-room').onclick = function() {
         }
     });
 };
+
+function endCall() {
+    connection.closeSocket();
+}
 
 document.getElementById('join-room').onclick = function() {
     disableInputButtons();
@@ -169,7 +173,7 @@ connection.onstream = function(event) {
     var width = parseInt(connection.videosContainer.clientWidth / 3) - 20;
     var mediaElement = getHTMLMediaElement(video, {
         title: event.userid,
-        buttons: ['full-screen'],
+        buttons: ['mute-audio', 'mute-video', 'full-screen', 'stop'],
         width: width,
         showOnMouseEnter: false
     });
