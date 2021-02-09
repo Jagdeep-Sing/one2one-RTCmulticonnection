@@ -26,15 +26,14 @@
     </div>
 
     <div id="videos-container" style="margin: 20px 0;"></div>
-    <div id="controls-btns">
-        <button id="j-mute" onclick="muteCall()" style="display: none;">Mute</button>
-        <button id="j-unmute" onclick="unmuteCall()" style="display: none;">Unmute</button>
-        <button id="j-end" onclick="endCall()" style="display: none;">End Call</button>
+    <div id="controls-btns" style="display: none;">
+        <button id="j-end" onclick="endCall()" >End Call</button>
+        <button id="j-mute-v" onclick="muteVideo()">Stop video stream</button>
+        <button id="j-unmute-v" onclick="unmuteVideo()" >Resume Video stream</button>
+        <button id="j-mute" onclick="muteCall()" >Mute</button>
+        <button id="j-unmute" onclick="unmuteCall()" >Unmute</button>
+       
     </div>
-    
-
-
-
     <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
   </section>
 
@@ -70,13 +69,23 @@ function endCall() {
 }
 
 function muteCall() {
-    // var streamByUserId = connection.streamEvents.selectFirst({ userid: remoteUserId }).stream;
-    // streamByUserId.mute();
+    var localStream = connection.attachStreams[0];
+    localStream.mute('audio');
 }
 
 function unmuteCall() {
-    // var firstRemoteStream = connection.streamEvents.selectFirst({ remote: true }).stream;
-    // firstRemoteStream.unmute();
+    var localStream = connection.attachStreams[0];
+    localStream.unmute('audio');
+}
+
+function muteVideo() {
+    var localStream = connection.attachStreams[0];
+    localStream.mute('video');
+}
+
+function unmuteVideo() {
+    var localStream = connection.attachStreams[0];
+    localStream.unmute('video');
 }
 
 document.getElementById('join-room').onclick = function() {
@@ -158,9 +167,7 @@ connection.sdpConstraints.mandatory = {
 
 connection.videosContainer = document.getElementById('videos-container');
 connection.onstream = function(event) {
-    document.getElementById('j-mute').style.display = 'block';
-    document.getElementById('j-unmute').style.display = 'block';
-    document.getElementById('j-end').style.display = 'block';
+    document.getElementById('controls-btns').style.display = 'block';
     document.getElementById("controls-btns").setAttribute("align", "center");
 
     var existing = document.getElementById(event.streamid);
