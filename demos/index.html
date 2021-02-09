@@ -26,7 +26,15 @@
     </div>
 
     <div id="videos-container" style="margin: 20px 0;"></div>
+    <div id="controls-btns">
+        <button id="j-mute" onclick="muteCall()" style="display: none;">Mute</button>
+        <button id="j-unmute" onclick="unmuteCall()" style="display: none;">Unmute</button>
+        <button id="j-end" onclick="endCall()" style="display: none;">End Call</button>
+    </div>
     
+
+
+
     <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
   </section>
 
@@ -59,6 +67,16 @@ document.getElementById('open-room').onclick = function() {
 
 function endCall() {
     connection.closeSocket();
+}
+
+function muteCall() {
+    // var streamByUserId = connection.streamEvents.selectFirst({ userid: remoteUserId }).stream;
+    // streamByUserId.mute();
+}
+
+function unmuteCall() {
+    // var firstRemoteStream = connection.streamEvents.selectFirst({ remote: true }).stream;
+    // firstRemoteStream.unmute();
 }
 
 document.getElementById('join-room').onclick = function() {
@@ -140,6 +158,11 @@ connection.sdpConstraints.mandatory = {
 
 connection.videosContainer = document.getElementById('videos-container');
 connection.onstream = function(event) {
+    document.getElementById('j-mute').style.display = 'block';
+    document.getElementById('j-unmute').style.display = 'block';
+    document.getElementById('j-end').style.display = 'block';
+    document.getElementById("controls-btns").setAttribute("align", "center");
+
     var existing = document.getElementById(event.streamid);
     if (existing && existing.parentNode) {
         existing.parentNode.removeChild(existing);
@@ -173,7 +196,7 @@ connection.onstream = function(event) {
     var width = parseInt(connection.videosContainer.clientWidth / 3) - 20;
     var mediaElement = getHTMLMediaElement(video, {
         title: event.userid,
-        buttons: ['mute-audio', 'mute-video', 'full-screen', 'stop'],
+        buttons: ['full-screen'],
         width: width,
         showOnMouseEnter: false
     });
